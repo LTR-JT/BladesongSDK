@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "id": "ExampleHello",
+  "name": "Basic",
+  "author": "Your name",
+  "description": "SDK example; test in a development save",
+  "version": "1.0.0",
+  "api": "^1.0.0",
+  "dependencies": {
+    "BladesongModFramework": ">=0.1.4 <1.0.0"
+  },
+  "capabilities": [],
+  "files": [],
+  "dependency_sources": {
+    "BladesongModFramework": "https://github.com/LTR-JT/BladesongModFramework"
+  },
+  "package": {
+    "format": "bladesong-mod-1",
+    "target": "ue4ss-mods"
+  }
+}

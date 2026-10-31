@@ -1,0 +1,25 @@
+name: Checks and build
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: BladesongSDK
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: BladesongSDK
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python Tools/build_ci_lua.py
+      - run: python Tools/run_checks.py --lua Tests/ci-lua/lua.exe
+      - run: python Tools/package_release.py
+      - run: python Tools/check_packages.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: BladesongSDK-candidate
+          path: BladesongSDK/Releases/

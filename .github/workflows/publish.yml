@@ -1,0 +1,44 @@
+name: Publish repository component (manual only)
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Matching v-tag for this repository
+        required: true
+        type: string
+      draft:
+        description: Keep as an unpublished draft
+        type: boolean
+        default: true
+permissions:
+  contents: write
+jobs:
+  windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: BladesongSDK
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: BladesongSDK
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python Tools/build_ci_lua.py
+      - run: python Tools/run_checks.py --lua Tests/ci-lua/lua.exe
+      - run: python Tools/package_release.py
+      - run: python Tools/check_packages.py
+      - name: Publish only this repository's checked artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.tag }}
+          RELEASE_DRAFT: ${{ inputs.draft }}
+        shell: pwsh
+        run: |
+          $assets = @(python Tools/release_component.py $env:RELEASE_TAG)
+          if ($LASTEXITCODE -ne 0) { throw 'Version/tag mismatch' }
+          $options = @('--target', $env:GITHUB_SHA, '--notes-file', 'RELEASE_NOTES.md')
+          if ($env:RELEASE_DRAFT -eq 'true') { $options += '--draft' }
+          gh release create $env:RELEASE_TAG @assets @options
+          if ($LASTEXITCODE -ne 0) { throw 'Release publication failed' }

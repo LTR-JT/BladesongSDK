@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "id": "ExampleData",
+  "name": "Persistent Data",
+  "author": "Your name",
+  "description": "SDK example; test in a development save",
+  "version": "1.0.0",
+  "api": "^1.0.0",
+  "dependencies": {
+    "BladesongModFramework": ">=0.1.4 <1.0.0"
+  },
+  "capabilities": [],
+  "files": [],
+  "settings": {
+    "saved": {
+      "type": "table",
+      "default": {
+        "count": 0
+      }
+    }
+  },
+  "dependency_sources": {
+    "BladesongModFramework": "https://github.com/LTR-JT/BladesongModFramework"
+  },
+  "package": {
+    "format": "bladesong-mod-1",
+    "target": "ue4ss-mods"
+  }
+}
