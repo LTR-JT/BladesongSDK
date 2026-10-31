@@ -5,7 +5,7 @@ from pathlib import Path, PurePosixPath
 def validate(m):
     assert m.get('schema_version') == 1 and re.fullmatch(r'[A-Za-z0-9_-]{1,64}',m['id'])
     assert re.fullmatch(r'\d+\.\d+\.\d+(?:-[\w.-]+)?',m['version']) and m['name']
-    assert m.get('api') and len(m['files']) <= 4096
+    assert (m.get('standalone')is True or m.get('api')) and len(m['files']) <= 4096
     seen = set(); total = 0
     for f in m['files']:
         raw = f['path']; parts = PurePosixPath(raw).parts

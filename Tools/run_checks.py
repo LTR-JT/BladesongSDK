@@ -14,3 +14,11 @@ with tempfile.TemporaryDirectory(dir=ROOT/'Tests')as tmp:
  for path in (ROOT/'SDK/templates').glob('*/mod.json'):package(path.parent,tmp/(path.parent.name+'.zip'))
 subprocess.run([sys.executable,str(ROOT/'Tools/build_docs.py')],check=True)
 print('PASS: SDK schemas, frozen API, Lua templates and standalone packaging; no manager installed or imported')
+
+standalone={'schema_version':1,'id':'StandaloneExample','name':'Standalone example','version':'1.0.0','standalone':True,'files':[]}
+validate_manifest(standalone)
+standalone.pop('standalone')
+try:validate_manifest(standalone)
+except ValueError:pass
+else:raise AssertionError('SDK mod without API range accepted')
+print('PASS: standalone UE4SS manifests need no framework API; ordinary SDK manifests still require it')

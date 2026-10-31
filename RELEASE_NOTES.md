@@ -1,1 +1,1 @@
-Unpublished SDK 1.0.1 candidate. Standalone API 1.0.0 contracts, schemas, authoring tools, examples and documentation. No manager dependency.
+Unpublished SDK 1.0.2 candidate. Added conditional standalone UE4SS metadata support without weakening SDK API requirements. API 1.0.0 remains unchanged. The optional manager no longer requires the framework.

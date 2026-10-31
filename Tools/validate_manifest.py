@@ -6,10 +6,15 @@ claiming support for the entire JSON Schema specification.
 from pathlib import Path
 import argparse,json,re
 from urllib.parse import urlparse
-KEYS={'$schema','$id','title','description','type','required','properties','additionalProperties','items','enum','const','pattern','format','minLength','maxLength','minItems','maxItems','minimum','maximum'}
+KEYS={'$schema','$id','title','description','type','required','properties','additionalProperties','items','enum','const','pattern','format','minLength','maxLength','minItems','maxItems','minimum','maximum','allOf','if','then','else'}
 def check(value,schema,path='$'):
  unknown=set(schema)-KEYS
  if unknown:raise ValueError('Unsupported schema keywords: '+str(unknown))
+ for branch in schema.get('allOf',[]):check(value,branch,path)
+ if 'if'in schema:
+  try:check(value,schema['if'],path);matched=True
+  except ValueError:matched=False
+  check(value,schema.get('then'if matched else'else',{}),path)
  kind=schema.get('type');types={'object':dict,'array':list,'string':str,'integer':int,'boolean':bool,'number':(int,float)}
  if kind and (not isinstance(value,types[kind])or(kind in ('integer','number')and isinstance(value,bool))):raise ValueError(path+': expected '+kind)
  if 'const'in schema and value!=schema['const']:raise ValueError(path+': unexpected constant')
@@ -34,6 +39,7 @@ def check(value,schema,path='$'):
 def validate_manifest(value,schema=None):
  schema=schema or json.loads((Path(__file__).resolve().parents[1]/'SDK/mod.schema.json').read_text(encoding='utf-8'))
  check(value,schema)
+ if not value.get('standalone',False)and not value.get('api'):raise ValueError('SDK-integrated mods require an api range')
  for field in ['dependencies','optional_dependencies']:
   for id,version in value.get(field,{}).items():
    if not re.fullmatch('[A-Za-z0-9_-]{1,64}',id)or not version.strip():raise ValueError('Invalid dependency identifier/range')

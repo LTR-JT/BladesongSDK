@@ -1,6 +1,6 @@
 # Bladesong SDK
 
-Independent developer SDK for [BladesongModFramework](https://github.com/LTR-JT/BladesongModFramework). SDK 1.0.1 targets API 1.0.0 and manifest schema 1. Developing and packaging mods requires no Mod Manager installation or source checkout.
+Independent developer SDK for [BladesongModFramework](https://github.com/LTR-JT/BladesongModFramework). SDK 1.0.2 targets API 1.0.0 and manifest schema 1. Developing and packaging mods requires no Mod Manager installation or source checkout.
 
 SDK/ contains portable JSON schemas, Lua type definitions, stable API contracts and mod templates. Documentation/ and Examples/ cover runtime services, compatibility, authoring and publishing. Tools/ contains metadata validation and installer-independent package generation. No runtime or manager binary is included.
 

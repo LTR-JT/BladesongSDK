@@ -7,8 +7,7 @@
     "schema_version",
     "id",
     "name",
-    "version",
-    "api"
+    "version"
   ],
   "properties": {
     "schema_version": {
@@ -219,7 +218,31 @@
     },
     "$schema": {
       "type": "string"
+    },
+    "standalone": {
+      "type": "boolean",
+      "description": "Does not require the framework runtime. SDK API is required otherwise."
     }
   },
-  "additionalProperties": false
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "standalone": {
+            "const": true
+          }
+        },
+        "required": [
+          "standalone"
+        ]
+      },
+      "then": {},
+      "else": {
+        "required": [
+          "api"
+        ]
+      }
+    }
+  ]
 }
